@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  email    String @unique @db.VarChar(255)
+  phone    String @db.VarChar(15)
+  password String
+  role     Role   @default(common)
+
+  properties Property[]
+  projects   Project[]
+
+  finishedAt DateTime? @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @db.Timestamptz()
+  updatedAt  DateTime  @updatedAt @db.Timestamptz()
+
+  @@map("user")
+}
+
+enum Role {
+  common
+  admin
+}
+
+model Property {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(255)
+  totalArea Float
+
+  address  Address   @relation(fields: [addressId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  projects Project[]
+  flocks   Flock[]
+
+  addressId Int @unique
+  userId    Int
+
+  finishedAt DateTime? @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @db.Timestamptz()
+  updatedAt  DateTime  @updatedAt @db.Timestamptz()
+
+  @@map("property")
+}
+
+model Address {
+  id           Int    @id @default(autoincrement())
+  zipCode      String @db.VarChar(9)
+  state        String @db.VarChar(30)
+  city         String @db.VarChar(50)
+  municipality String @db.VarChar(50)
+  street       String @db.VarChar(255)
+  number       String @db.VarChar(20)
+
+  property Property?
+
+  finishedAt DateTime? @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @db.Timestamptz()
+  updatedAt  DateTime  @updatedAt @db.Timestamptz()
+
+  @@map("address")
+}
+
+model Flock {
+  id           Int    @id @default(autoincrement())
+  name         String @db.VarChar(255)
+  totalCows    Int
+  totalHeifers Int
+  totalCalves  Int
+  totalOthers  Int
+
+  projects   Project[]
+  property   Property  @relation(fields: [propertyId], references: [id])
+  propertyId Int
+
+  finishedAt DateTime? @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @db.Timestamptz()
+  updatedAt  DateTime  @updatedAt @db.Timestamptz()
+
+  @@map("flock")
+}
+
+model Project {
+  id                  Int     @id @default(autoincrement())
+  name                String  @db.VarChar(255)
+  profit              Decimal
+  profitPerLiter      Decimal
+  productionPerAnimal Decimal
+
+  flock    Flock    @relation(fields: [flockId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  flockId    Int
+  propertyId Int
+  userId     Int
+
+  finishedAt DateTime? @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @db.Timestamptz()
+  updatedAt  DateTime  @updatedAt @db.Timestamptz()
+
+  @@map("project")
+}
