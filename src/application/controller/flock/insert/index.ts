@@ -78,6 +78,11 @@ export const insertFlockController: Controller =
       if (typeof userId !== 'undefined' && !(await hasUserById(userId)))
         return notFound({ entity: { english: 'User', portuguese: 'Usuário' }, response });
 
+      await DataSource.flock.updateMany({
+        data: { finishedAt: new Date() },
+        where: { AND: { finishedAt: null, propertyId } }
+      });
+
       const payload = await DataSource.flock.create({
         data: {
           name,
