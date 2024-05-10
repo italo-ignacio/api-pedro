@@ -1,12 +1,9 @@
-import { emailRequired, stringRequired } from '@main/utils';
+import { emailRequired, phoneRequired, stringRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const insertUserSchema = yup.object().shape({
   body: yup.object().shape({
-    email: emailRequired({
-      english: 'email',
-      portuguese: 'e-mail'
-    }),
+    email: emailRequired(),
     name: stringRequired({
       english: 'name',
       length: 255,
@@ -15,6 +12,7 @@ export const insertUserSchema = yup.object().shape({
     password: stringRequired({
       english: 'password',
       portuguese: 'senha'
-    })
+    }),
+    phone: phoneRequired()
   })
 });

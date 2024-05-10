@@ -12,11 +12,13 @@ import type {
 } from 'yup';
 import type { messageTypeResponse } from '@domain/errors';
 
-export const emailRequired = (field: messageTypeResponse): StringSchema =>
+export const emailRequired = (): StringSchema =>
   yup
     .string()
     .email(JSON.stringify(messages.yup.emailSchema))
-    .required(JSON.stringify(messages.yup.requiredSchema(field)));
+    .required(
+      JSON.stringify(messages.yup.requiredSchema({ english: 'email', portuguese: 'e-mail' }))
+    );
 
 export const emailNotRequired = (): StringSchema =>
   yup.string().email(JSON.stringify(messages.yup.emailSchema));
@@ -46,6 +48,38 @@ export const stringNotRequired = (
 
 export const mixedRequired = (field: messageTypeResponse): MixedSchema =>
   yup.mixed().required(JSON.stringify(messages.yup.requiredSchema(field)));
+
+export const phoneRequired = (): StringSchema =>
+  yup
+    .string()
+    .transform((value) => value?.replace(/\D/gu, ''))
+    .matches(/^\d{11}$/u, JSON.stringify(messages.yup.phoneSchema))
+    .required(
+      JSON.stringify(messages.yup.requiredSchema({ english: 'phone', portuguese: 'telefone' }))
+    );
+
+export const phoneNotRequired = (): StringSchema<Maybe<string | undefined>> =>
+  yup
+    .string()
+    .transform((value) => value?.replace(/\D/gu, ''))
+    .matches(/^\d{11}$/u, JSON.stringify(messages.yup.phoneSchema))
+    .notRequired();
+
+export const zipCodeRequired = (): StringSchema =>
+  yup
+    .string()
+    .transform((value) => value?.replace(/\D/gu, ''))
+    .matches(/^\d{9}$/u, JSON.stringify(messages.yup.zipCodeSchema))
+    .required(
+      JSON.stringify(messages.yup.requiredSchema({ english: 'zip code', portuguese: 'CEP' }))
+    );
+
+export const zipCodeNotRequired = (): StringSchema<Maybe<string | undefined>> =>
+  yup
+    .string()
+    .transform((value) => value?.replace(/\D/gu, ''))
+    .matches(/^\d{9}$/u, JSON.stringify(messages.yup.zipCodeSchema))
+    .notRequired();
 
 export const booleanRequired = (field: messageTypeResponse): BooleanSchema =>
   yup.boolean().required(JSON.stringify(messages.yup.requiredSchema(field)));

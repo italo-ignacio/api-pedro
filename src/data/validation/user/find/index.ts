@@ -1,5 +1,3 @@
-export type userFields = 'createdAt' | 'email' | 'name' | 'updatedAt';
+export type userQueryFields = 'email' | 'name' | 'phone';
 
-export type userQueryFields = 'email' | 'endDate' | 'name' | 'startDate';
-
-export const userListQueryFields: userQueryFields[] = ['name', 'startDate', 'email', 'endDate'];
+export const userListQueryFields: userQueryFields[] = ['name', 'email', 'phone'];

@@ -1,8 +1,8 @@
 import { DataSource } from '@infra/database';
-import { Role } from '@prisma/client';
 import { badRequest, errorLogger, forbidden, ok } from '@main/utils';
 import { messages } from '@domain/helpers';
 import { userFindParams } from '@data/search';
+import { userIsOwner } from '@application/helper';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
@@ -26,23 +26,16 @@ import type { Request, Response } from 'express';
 export const deleteUserController: Controller =
   () => async (request: Request, response: Response) => {
     try {
-      if (Number(request.params.id) !== Number(request.user.id) && request.user.role !== Role.admin)
+      if (!userIsOwner(request))
         return forbidden({
-          message: {
-            english: 'delete this user',
-            portuguese: 'deletar este usuário'
-          },
+          message: { english: 'delete this user', portuguese: 'deletar este usuário' },
           response
         });
 
       const payload = await DataSource.user.update({
-        data: {
-          finishedAt: new Date()
-        },
+        data: { finishedAt: new Date() },
         select: userFindParams,
-        where: {
-          id: Number(request.params.id)
-        }
+        where: { id: Number(request.params.id) }
       });
 
       return ok({ payload, response });

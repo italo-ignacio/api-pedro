@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/init-declarations */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
 import {
@@ -10,6 +9,7 @@ import {
   validationErrorResponse
 } from '@main/utils';
 import { env } from '@main/config';
+import { hasUserByEmail, userIsOwner } from '@application/helper';
 import { hash } from 'bcrypt';
 import { messages } from '@domain/helpers';
 import { updateUserSchema } from '@data/validation';
@@ -21,13 +21,15 @@ interface Body {
   password?: string;
   email?: string;
   name?: string;
+  phone?: string;
 }
 
 /**
- * @typedef {object} UpdateUserProps
+ * @typedef {object} UpdateUserBody
  * @property {string} name
  * @property {string} email
  * @property {string} password
+ * @property {string} phone
  */
 
 /**
@@ -42,7 +44,7 @@ interface Body {
  * @summary Update User
  * @tags User
  * @security BearerAuth
- * @param {UpdateUserProps} request.body
+ * @param {UpdateUserBody} request.body
  * @param {string} id.path.required
  * @return {UpdateUserResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
@@ -52,36 +54,22 @@ interface Body {
 export const updateUserController: Controller =
   () => async (request: Request, response: Response) => {
     try {
-      if (Number(request.params.id) !== Number(request.user.id))
+      if (!userIsOwner(request))
         return forbidden({
-          message: {
-            english: 'update this user',
-            portuguese: 'atualizar este usuário'
-          },
+          message: { english: 'update this user', portuguese: 'atualizar este usuário' },
           response
         });
 
       await updateUserSchema.validate(request, { abortEarly: false });
 
-      const { email, name, password } = request.body as Body;
+      const { email, name, password, phone } = request.body as Body;
 
-      if (typeof email !== 'undefined') {
-        const hasUser = await DataSource.user.findUnique({
-          select: {
-            id: true
-          },
-          where: {
-            email
-          }
-        });
-
-        if (hasUser !== null && hasUser.id !== Number(request.params.id))
-          return badRequest({ message: messages.auth.userAlreadyExists, response });
-      }
+      if (await hasUserByEmail(email))
+        return badRequest({ message: messages.auth.userAlreadyExists, response });
 
       let newPassword: string | undefined;
 
-      if (typeof password !== 'undefined') {
+      if (typeof password === 'string') {
         const { HASH_SALT } = env;
 
         const hashedPassword = await hash(password, HASH_SALT);
@@ -89,12 +77,14 @@ export const updateUserController: Controller =
         newPassword = hashedPassword;
       }
 
+      let newPhone: string | undefined;
+
+      if (typeof phone === 'string') newPhone = phone.replace(/\D/gu, '');
+
       const payload = await DataSource.user.update({
-        data: { email, name, password: newPassword },
+        data: { email, name, password: newPassword, phone: newPhone },
         select: userFindParams,
-        where: {
-          id: Number(request.params.id)
-        }
+        where: { id: Number(request.params.id) }
       });
 
       return ok({ payload, response });

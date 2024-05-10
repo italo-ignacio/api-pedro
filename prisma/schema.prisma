@@ -10,7 +10,7 @@ datasource db {
 model User {
   id       Int    @id @default(autoincrement())
   name     String @db.VarChar(255)
-  email    String @unique @db.VarChar(255)
+  email    String
   phone    String @db.VarChar(15)
   password String
   role     Role   @default(common)
@@ -53,11 +53,11 @@ model Property {
 model Address {
   id           Int    @id @default(autoincrement())
   zipCode      String @db.VarChar(9)
-  state        String @db.VarChar(30)
+  state        String @db.VarChar(50)
   city         String @db.VarChar(50)
   municipality String @db.VarChar(50)
   street       String @db.VarChar(255)
-  number       String @db.VarChar(20)
+  number       String @db.VarChar(50)
 
   property Property?
 

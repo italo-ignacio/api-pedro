@@ -8,6 +8,7 @@ import {
   validationErrorResponse
 } from '@main/utils';
 import { env } from '@main/config';
+import { hasUserByEmail } from '@application/helper';
 import { hash } from 'bcrypt';
 import { insertUserSchema } from '@data/validation';
 import { messages } from '@domain/helpers';
@@ -16,14 +17,14 @@ import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
-  email: string;
   name: string;
+  email: string;
   password: string;
   phone: string;
 }
 
 /**
- * @typedef {object} InsertUserProps
+ * @typedef {object} InsertUserBody
  * @property {string} name.required
  * @property {string} email.required
  * @property {string} password.required
@@ -43,11 +44,12 @@ interface Body {
  * @tags User
  * @example request - payload example
  * {
- *   "name": "test",
- *   "email": "test@test",
- *   "password": "test@123"
+ *   "name": "support",
+ *   "phone": "(00) 00000-0000",
+ *   "email": "support@sp.senai.br",
+ *   "password": "Senai@127"
  * }
- * @param {InsertUserProps} request.body.required
+ * @param {InsertUserBody} request.body.required
  * @return {InsertUserResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  */
@@ -58,16 +60,7 @@ export const insertUserController: Controller =
 
       const { email, name, password, phone } = request.body as Body;
 
-      const hasUser = await DataSource.user.findUnique({
-        select: {
-          id: true
-        },
-        where: {
-          email
-        }
-      });
-
-      if (hasUser !== null)
+      if (await hasUserByEmail(email))
         return badRequest({ message: messages.auth.userAlreadyExists, response });
 
       const { HASH_SALT } = env;
@@ -75,7 +68,7 @@ export const insertUserController: Controller =
       const hashedPassword = await hash(password, HASH_SALT);
 
       const payload = await DataSource.user.create({
-        data: { email, name, password: hashedPassword, phone },
+        data: { email, name, password: hashedPassword, phone: phone.replace(/\D/gu, '') },
         select: userFindParams
       });
 

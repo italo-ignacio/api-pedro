@@ -21,7 +21,7 @@ interface Body {
 }
 
 /**
- * @typedef {object} LoginProps
+ * @typedef {object} LoginBody
  * @property {string} email.required
  * @property {string} password.required
  */
@@ -42,13 +42,13 @@ interface Body {
 /**
  * POST /login
  * @summary Login
- * @tags Auth
+ * @tags A Auth
  * @example request - payload example
  * {
  *   "email": "support@sp.senai.br",
- *   "password": "password"
+ *   "password": "Senai@127"
  * }
- * @param {LoginProps} request.body.required - application/json
+ * @param {LoginBody} request.body.required - application/json
  * @return {LoginResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  */
@@ -59,24 +59,16 @@ export const authenticateUserController: Controller =
 
       const { email, password } = request.body as Body;
 
-      const user = await DataSource.user.findUnique({
+      const user = await DataSource.user.findFirst({
         select: { ...userFindParams, password: true },
-        where: { email }
+        where: { AND: { email, finishedAt: null } }
       });
 
-      if (user === null)
-        return badRequest({
-          message: messages.auth.notFound,
-          response
-        });
+      if (user === null) return badRequest({ message: messages.auth.notFound, response });
 
       const passwordIsCorrect = await compare(password, user.password);
 
-      if (!passwordIsCorrect)
-        return badRequest({
-          message: messages.auth.notFound,
-          response
-        });
+      if (!passwordIsCorrect) return badRequest({ message: messages.auth.notFound, response });
 
       const { accessToken } = generateToken({
         email: user.email,
@@ -91,7 +83,6 @@ export const authenticateUserController: Controller =
           user: {
             createdAt: user.createdAt,
             email: user.email,
-            finishedAt: user.finishedAt,
             id: user.id,
             name: user.name,
             phone: user.phone,

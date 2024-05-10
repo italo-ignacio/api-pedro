@@ -21,8 +21,18 @@ export const yupMessages = {
     portuguese: `O campo ${value.portuguese} deve ser uma número`
   }),
 
+  phoneSchema: {
+    english: 'Invalid phone number',
+    portuguese: 'Número de telefone inválido'
+  },
+
   requiredSchema: (value: messageTypeResponse): messageTypeResponse => ({
     english: `The field ${value.english} is required`,
     portuguese: `O campo ${value.portuguese} é obrigatório`
-  })
+  }),
+
+  zipCodeSchema: {
+    english: 'Invalid zipCode',
+    portuguese: 'CEP inválido'
+  }
 };

@@ -13,9 +13,8 @@ interface GetPageAndLimitOutput {
 export const getPagination = ({ query }: GetPageAndLimitInput): GetPageAndLimitOutput => {
   const page = Number(query.page ?? 1);
   const limit = Number(query.limit ?? 30);
-  const subtractPage = 1;
 
-  const skip = (page - subtractPage) * limit;
+  const skip = (page - 1) * limit;
   const take = limit;
 
   return { skip, take };
