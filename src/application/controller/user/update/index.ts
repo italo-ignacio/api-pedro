@@ -5,8 +5,10 @@ import {
   errorLogger,
   forbidden,
   messageErrorResponse,
+  notFound,
   ok,
-  validationErrorResponse
+  validationErrorResponse,
+  whereById
 } from '@main/utils';
 import { env } from '@main/config';
 import { hasUserByEmail, userIsOwner } from '@application/helper';
@@ -84,8 +86,14 @@ export const updateUserController: Controller =
       const payload = await DataSource.user.update({
         data: { email, name, password: newPassword, phone: newPhone },
         select: userFindParams,
-        where: { id: Number(request.params.id) }
+        where: whereById(request.params.id)
       });
+
+      if (payload === null)
+        return notFound({
+          entity: { english: 'User', portuguese: 'Usuário' },
+          response
+        });
 
       return ok({ payload, response });
     } catch (error) {

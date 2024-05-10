@@ -7,3 +7,4 @@ export * from './pagination';
 export * from './filter';
 export * from './default-folder';
 export * from './delete-files';
+export * from './where-by-id';

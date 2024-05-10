@@ -1,10 +1,8 @@
 import { DataSource } from '@infra/database';
-import { Role } from '@prisma/client';
 import { addressFindParams } from '@data/search';
 import { addressListQueryFields } from '@data/validation';
 import {
   errorLogger,
-  forbidden,
   getGenericFilter,
   getPagination,
   messageErrorResponse,
@@ -51,17 +49,8 @@ import type { addressQueryFields } from '@data/validation';
  */
 export const findAddressController: Controller =
   () =>
-  async ({ query, user }: Request, response: Response) => {
+  async ({ query }: Request, response: Response) => {
     try {
-      if (user.role !== Role.admin)
-        return forbidden({
-          message: {
-            english: 'access this route',
-            portuguese: 'acessar esta rota'
-          },
-          response
-        });
-
       const { skip, take } = getPagination({ query });
       const { orderBy, where } = getGenericFilter<addressQueryFields>({
         list: addressListQueryFields,

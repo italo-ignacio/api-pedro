@@ -17,6 +17,7 @@ model User {
 
   properties Property[]
   projects   Project[]
+  flocks     Flock[]
 
   finishedAt DateTime? @db.Timestamptz()
   createdAt  DateTime  @default(now()) @db.Timestamptz()
@@ -71,13 +72,16 @@ model Address {
 model Flock {
   id           Int    @id @default(autoincrement())
   name         String @db.VarChar(255)
-  totalCows    Int
-  totalHeifers Int
-  totalCalves  Int
-  totalOthers  Int
+  totalCows    Float
+  totalHeifers Float
+  totalCalves  Float
+  totalOthers  Float
 
-  projects   Project[]
-  property   Property  @relation(fields: [propertyId], references: [id])
+  projects Project[]
+  property Property  @relation(fields: [propertyId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+
+  userId     Int
   propertyId Int
 
   finishedAt DateTime? @db.Timestamptz()

@@ -69,7 +69,7 @@ export const zipCodeRequired = (): StringSchema =>
   yup
     .string()
     .transform((value) => value?.replace(/\D/gu, ''))
-    .matches(/^\d{9}$/u, JSON.stringify(messages.yup.zipCodeSchema))
+    .matches(/^\d{8}$/u, JSON.stringify(messages.yup.zipCodeSchema))
     .required(
       JSON.stringify(messages.yup.requiredSchema({ english: 'zip code', portuguese: 'CEP' }))
     );

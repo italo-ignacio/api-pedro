@@ -84,6 +84,18 @@ export const getGenericFilter = <QueryType extends string>({
             equals: query[item]
           }
         });
+      else if (item.endsWith('GreaterThan'))
+        where.push({
+          [item.replace('GreaterThan', '')]: {
+            gte: Number(query[item])
+          }
+        });
+      else if (item.endsWith('LessThan'))
+        where.push({
+          [item.replace('LessThan', '')]: {
+            lte: Number(query[item])
+          }
+        });
       else if (item.endsWith('Id'))
         where.push({
           [item]: {
@@ -91,6 +103,13 @@ export const getGenericFilter = <QueryType extends string>({
           }
         });
       else if (item === 'phone')
+        where.push({
+          [item]: {
+            contains: query[item]?.replace(/\D/gu, ''),
+            mode: 'insensitive'
+          }
+        });
+      else if (item === 'zipCode')
         where.push({
           [item]: {
             contains: query[item]?.replace(/\D/gu, ''),

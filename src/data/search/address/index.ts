@@ -1,14 +1,15 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 import type { Prisma } from '@prisma/client';
 
 export const addressFindParams: Prisma.AddressSelect = {
-  city: true,
-  createdAt: true,
-  finishedAt: true,
   id: true,
+  city: true,
   municipality: true,
   number: true,
   state: true,
   street: true,
-  updatedAt: true,
-  zipCode: true
+  zipCode: true,
+  finishedAt: true,
+  createdAt: true,
+  updatedAt: true
 };

@@ -1,5 +1,5 @@
 import { DataSource } from '@infra/database';
-import { badRequest, errorLogger, forbidden, ok } from '@main/utils';
+import { badRequest, errorLogger, forbidden, notFound, ok, whereById } from '@main/utils';
 import { messages } from '@domain/helpers';
 import { userFindParams } from '@data/search';
 import { userIsOwner } from '@application/helper';
@@ -33,10 +33,48 @@ export const deleteUserController: Controller =
         });
 
       const payload = await DataSource.user.update({
-        data: { finishedAt: new Date() },
+        data: {
+          finishedAt: new Date(),
+          flocks: {
+            updateMany: {
+              data: {
+                finishedAt: new Date()
+              },
+              where: {
+                userId: Number(request.params.id)
+              }
+            }
+          },
+          projects: {
+            updateMany: {
+              data: {
+                finishedAt: new Date()
+              },
+              where: {
+                userId: Number(request.params.id)
+              }
+            }
+          },
+          properties: {
+            updateMany: {
+              data: {
+                finishedAt: new Date()
+              },
+              where: {
+                userId: Number(request.params.id)
+              }
+            }
+          }
+        },
         select: userFindParams,
-        where: { id: Number(request.params.id) }
+        where: whereById(request.params.id)
       });
+
+      if (payload === null)
+        return notFound({
+          entity: { english: 'User', portuguese: 'Usuário' },
+          response
+        });
 
       return ok({ payload, response });
     } catch (error) {

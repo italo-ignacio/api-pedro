@@ -1,7 +1,6 @@
 import { DataSource } from '@infra/database';
-import { Role } from '@prisma/client';
 import { addressFindParams } from '@data/search';
-import { errorLogger, forbidden, messageErrorResponse, notFound, ok } from '@main/utils';
+import { errorLogger, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
@@ -26,18 +25,9 @@ import type { Request, Response } from 'express';
 export const findOneAddressController: Controller =
   () => async (request: Request, response: Response) => {
     try {
-      if (request.user.role !== Role.admin)
-        return forbidden({
-          message: {
-            english: 'access this route',
-            portuguese: 'acessar esta rota'
-          },
-          response
-        });
-
       const payload = await DataSource.address.findUnique({
         select: addressFindParams,
-        where: { id: Number(request.params.id) }
+        where: whereById(request.params.id)
       });
 
       if (payload === null)

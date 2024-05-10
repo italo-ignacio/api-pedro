@@ -8,19 +8,21 @@ import {
   messageErrorResponse,
   notFound,
   ok,
-  validationErrorResponse
+  validationErrorResponse,
+  whereById
 } from '@main/utils';
 import { updateAddressSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
+import type { Optional } from '@prisma/client/runtime/library';
 import type { Request, Response } from 'express';
 
-interface Body {
-  zipCode?: string;
-  state?: string;
-  city?: string;
-  municipality?: string;
-  street?: string;
-  number?: string;
+export interface InsertAddressBody {
+  zipCode: string;
+  state: string;
+  city: string;
+  municipality: string;
+  street: string;
+  number: number;
 }
 
 /**
@@ -30,7 +32,7 @@ interface Body {
  * @property {string} city
  * @property {string} municipality
  * @property {string} street
- * @property {string} number
+ * @property {number} number
  */
 
 /**
@@ -65,7 +67,7 @@ export const updateAddressController: Controller =
             }
           }
         },
-        where: { id: Number(request.params.id) }
+        where: whereById(request.params.id)
       });
 
       if (address === null)
@@ -77,16 +79,28 @@ export const updateAddressController: Controller =
           response
         });
 
-      if (address.property?.userId !== request.user.id || request.user.role !== Role.admin)
+      if (address.property?.userId !== request.user.id && request.user.role !== Role.admin)
         return forbidden({
           message: { english: 'update this address', portuguese: 'atualizar este endereço' },
           response
         });
 
-      const { city, municipality, number, state, street, zipCode } = request.body as Body;
+      const { city, municipality, number, state, street, zipCode } =
+        request.body as Optional<InsertAddressBody>;
+
+      let formattedNumber: string | undefined;
+
+      if (typeof number !== 'undefined') formattedNumber = String(number);
 
       const payload = await DataSource.address.update({
-        data: { city, municipality, number, state, street, zipCode },
+        data: {
+          city,
+          municipality,
+          number: formattedNumber,
+          state,
+          street,
+          zipCode
+        },
         select: addressFindParams,
         where: { id: Number(request.params.id) }
       });

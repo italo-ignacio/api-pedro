@@ -21,7 +21,7 @@ export const setupRoutes = (app: Express): void => {
   app.use(api.baseUrl, publicRouter);
   app.use(api.baseUrl, validateTokenMiddleware(), privateRouter);
 
-  app.get('*', (req, res) => {
+  app.get('/', (req, res) => {
     res.json({
       message: 'Api running successfully (◡‿◡)'
     });

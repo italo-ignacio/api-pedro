@@ -24,14 +24,16 @@ export const validateTokenMiddleware: Controller =
       if (
         typeof user.id === 'undefined' ||
         typeof user.name === 'undefined' ||
-        typeof user.email === 'undefined'
+        typeof user.email === 'undefined' ||
+        typeof user.role === 'undefined'
       )
         return unauthorized({ response });
 
       const account = await DataSource.user.findFirst({
         where: {
           AND: {
-            ...user
+            ...user,
+            finishedAt: null
           }
         }
       });
