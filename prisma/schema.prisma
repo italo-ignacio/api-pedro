@@ -92,12 +92,18 @@ model Flock {
 }
 
 model Project {
-  id                  Int     @id @default(autoincrement())
-  name                String  @db.VarChar(255)
-  profit              Decimal
-  profitPerLiter      Decimal
-  productionPerAnimal Decimal
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
 
+  monthlyProfit           Float
+  profitPerLiter          Float
+  requiredDailyVolume     Float
+  averageProductionPerCow Float
+
+  percentageOfLactatingCows Float
+  percentageOfCowsInFlock   Float
+
+  breed    Breed
   flock    Flock    @relation(fields: [flockId], references: [id])
   property Property @relation(fields: [propertyId], references: [id])
   user     User     @relation(fields: [userId], references: [id])
@@ -111,4 +117,10 @@ model Project {
   updatedAt  DateTime  @updatedAt @db.Timestamptz()
 
   @@map("project")
+}
+
+enum Breed {
+  small
+  medium
+  large
 }
