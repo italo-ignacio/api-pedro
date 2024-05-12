@@ -26,7 +26,7 @@ export const defaultMessages = {
     portuguese: 'Requisição bem sucedida'
   },
   successfullyDeleted: {
-    english: 'Successfully Deleted ',
+    english: 'Successfully Deleted',
     portuguese: 'Excluído com sucesso'
   },
   timeout: {
@@ -47,6 +47,10 @@ export const defaultMessages = {
       english: 'Error during file upload',
       portuguese: 'Erro durante o upload do arquivo'
     };
+  },
+  userAlreadyExists: {
+    english: 'User already exists',
+    portuguese: 'Usuário já existe'
   },
   validationErrorResponse: {
     english: 'Failed during form validation',

@@ -61,7 +61,7 @@ export const insertUserController: Controller =
       const { email, name, password, phone } = request.body as Body;
 
       if (await hasUserByEmail(email))
-        return badRequest({ message: messages.auth.userAlreadyExists, response });
+        return badRequest({ message: messages.default.userAlreadyExists, response });
 
       const { HASH_SALT } = env;
 

@@ -14,6 +14,9 @@ export const insertPropertySchema = yup.object().shape({
       english: 'total area',
       portuguese: 'area total'
     }),
-    userId: numberNotRequired()
+    userId: numberNotRequired({
+      english: 'user id',
+      portuguese: 'id do usuário'
+    })
   })
 });

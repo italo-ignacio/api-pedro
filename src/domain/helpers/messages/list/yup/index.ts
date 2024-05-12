@@ -1,9 +1,14 @@
 import type { messageTypeResponse } from '@domain/errors';
 
 export const yupMessages = {
+  booleanSchema: (value: messageTypeResponse): messageTypeResponse => ({
+    english: `The field ${value.english} must be a boolean`,
+    portuguese: `O campo ${value.portuguese} deve ser boleano`
+  }),
+
   dateSchema: {
     english: 'Invalid date',
-    portuguese: 'Data inválida'
+    portuguese: 'Dados inválidos'
   },
 
   emailSchema: {
@@ -18,7 +23,7 @@ export const yupMessages = {
 
   numberSchema: (value: messageTypeResponse): messageTypeResponse => ({
     english: `The field ${value.english} must be a number`,
-    portuguese: `O campo ${value.portuguese} deve ser uma número`
+    portuguese: `O campo ${value.portuguese} deve ser um número`
   }),
 
   phoneSchema: {
@@ -29,6 +34,11 @@ export const yupMessages = {
   requiredSchema: (value: messageTypeResponse): messageTypeResponse => ({
     english: `The field ${value.english} is required`,
     portuguese: `O campo ${value.portuguese} é obrigatório`
+  }),
+
+  stringSchema: (value: messageTypeResponse): messageTypeResponse => ({
+    english: `The field ${value.english} must be a text`,
+    portuguese: `O campo ${value.portuguese} deve ser um texto`
   }),
 
   zipCodeSchema: {

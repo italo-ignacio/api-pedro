@@ -27,7 +27,10 @@ export const flockSchema = yup.object().shape({
     english: 'total of other animals',
     portuguese: 'total de outros animais'
   }),
-  userId: numberNotRequired()
+  userId: numberNotRequired({
+    english: 'user id',
+    portuguese: 'id do usuário'
+  })
 });
 
 export const insertFlockSchema = yup.object().shape({

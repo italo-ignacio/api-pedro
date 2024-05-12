@@ -67,7 +67,7 @@ export const updateUserController: Controller =
       const { email, name, password, phone } = request.body as Body;
 
       if (await hasUserByEmail(email))
-        return badRequest({ message: messages.auth.userAlreadyExists, response });
+        return badRequest({ message: messages.default.userAlreadyExists, response });
 
       let newPassword: string | undefined;
 

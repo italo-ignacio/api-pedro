@@ -9,7 +9,10 @@ export const updateUserSchema = yup.object().shape({
       length: 255,
       portuguese: 'nome'
     }),
-    password: stringNotRequired(),
+    password: stringNotRequired({
+      english: 'password',
+      portuguese: 'senha'
+    }),
     phone: phoneNotRequired()
   })
 });

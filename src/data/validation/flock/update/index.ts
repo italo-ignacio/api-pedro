@@ -8,9 +8,21 @@ export const updateFlockSchema = yup.object().shape({
       length: 255,
       portuguese: 'nome'
     }),
-    totalCalves: numberNotRequired(),
-    totalCows: numberNotRequired(),
-    totalHeifers: numberNotRequired(),
-    totalOthers: numberNotRequired()
+    totalCalves: numberNotRequired({
+      english: 'total calves',
+      portuguese: 'total de bezerros'
+    }),
+    totalCows: numberNotRequired({
+      english: 'total cows',
+      portuguese: 'total de vacas'
+    }),
+    totalHeifers: numberNotRequired({
+      english: 'total heifers',
+      portuguese: 'total de novilhas'
+    }),
+    totalOthers: numberNotRequired({
+      english: 'total of other animals',
+      portuguese: 'total de outros animais'
+    })
   })
 });

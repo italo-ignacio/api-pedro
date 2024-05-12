@@ -27,32 +27,41 @@ export const stringRequired = (field: messageTypeResponse & { length?: number })
   typeof field.length === 'number'
     ? yup
         .string()
-        .trim()
+        .strict(true)
+        .typeError(JSON.stringify(messages.yup.stringSchema(field)))
         .max(field.length, JSON.stringify(messages.yup.maxLength(field, field.length)))
         .required(JSON.stringify(messages.yup.requiredSchema(field)))
     : yup
         .string()
-        .trim()
+        .strict(true)
+        .typeError(JSON.stringify(messages.yup.stringSchema(field)))
         .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
 export const stringNotRequired = (
-  field?: messageTypeResponse & { length: number }
+  field: messageTypeResponse & { length?: number }
 ): StringSchema<Maybe<string | undefined>> =>
-  typeof field === 'undefined'
-    ? yup.string().trim().notRequired()
+  typeof field.length === 'number'
+    ? yup
+        .string()
+        .strict(true)
+        .typeError(JSON.stringify(messages.yup.stringSchema(field)))
+        .max(field.length, JSON.stringify(messages.yup.maxLength(field, field.length)))
+        .notRequired()
     : yup
         .string()
-        .trim()
-        .max(field.length, JSON.stringify(messages.yup.maxLength(field, field.length)))
+        .strict(true)
+        .typeError(JSON.stringify(messages.yup.stringSchema(field)))
         .notRequired();
 
 export const mixedRequired = (field: messageTypeResponse): MixedSchema =>
   yup.mixed().required(JSON.stringify(messages.yup.requiredSchema(field)));
 
+export const mixedNotRequired = (): MixedSchema<Maybe<AnyObject>> => yup.mixed().notRequired();
+
 export const phoneRequired = (): StringSchema =>
   yup
     .string()
-    .transform((value) => value?.replace(/\D/gu, ''))
+    .transform((value) => String(value)?.replace(/\D/gu, ''))
     .matches(/^\d{11}$/u, JSON.stringify(messages.yup.phoneSchema))
     .required(
       JSON.stringify(messages.yup.requiredSchema({ english: 'phone', portuguese: 'telefone' }))
@@ -61,14 +70,14 @@ export const phoneRequired = (): StringSchema =>
 export const phoneNotRequired = (): StringSchema<Maybe<string | undefined>> =>
   yup
     .string()
-    .transform((value) => value?.replace(/\D/gu, ''))
+    .transform((value) => String(value)?.replace(/\D/gu, ''))
     .matches(/^\d{11}$/u, JSON.stringify(messages.yup.phoneSchema))
     .notRequired();
 
 export const zipCodeRequired = (): StringSchema =>
   yup
     .string()
-    .transform((value) => value?.replace(/\D/gu, ''))
+    .transform((value) => String(value)?.replace(/\D/gu, ''))
     .matches(/^\d{8}$/u, JSON.stringify(messages.yup.zipCodeSchema))
     .required(
       JSON.stringify(messages.yup.requiredSchema({ english: 'zip code', portuguese: 'CEP' }))
@@ -77,20 +86,24 @@ export const zipCodeRequired = (): StringSchema =>
 export const zipCodeNotRequired = (): StringSchema<Maybe<string | undefined>> =>
   yup
     .string()
-    .transform((value) => value?.replace(/\D/gu, ''))
+    .transform((value) => String(value)?.replace(/\D/gu, ''))
     .matches(/^\d{9}$/u, JSON.stringify(messages.yup.zipCodeSchema))
     .notRequired();
 
 export const booleanRequired = (field: messageTypeResponse): BooleanSchema =>
-  yup.boolean().required(JSON.stringify(messages.yup.requiredSchema(field)));
-
-export const booleanNotRequired = (): BooleanSchema<Maybe<boolean | undefined>> =>
-  yup.boolean().notRequired();
-
-export const mixedNotRequired = (field: messageTypeResponse): MixedSchema<Maybe<AnyObject>> =>
   yup
-    .mixed()
-    .required(JSON.stringify(messages.yup.requiredSchema(field)))
+    .boolean()
+    .strict(true)
+    .typeError(JSON.stringify(messages.yup.booleanSchema(field)))
+    .required(JSON.stringify(messages.yup.requiredSchema(field)));
+
+export const booleanNotRequired = (
+  field: messageTypeResponse
+): BooleanSchema<Maybe<boolean | undefined>> =>
+  yup
+    .boolean()
+    .strict(true)
+    .typeError(JSON.stringify(messages.yup.booleanSchema(field)))
     .notRequired();
 
 export const numberRequired = (field: messageTypeResponse): NumberSchema =>
@@ -99,8 +112,13 @@ export const numberRequired = (field: messageTypeResponse): NumberSchema =>
     .typeError(JSON.stringify(messages.yup.numberSchema(field)))
     .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
-export const numberNotRequired = (): NumberSchema<Maybe<number | undefined>> =>
-  yup.number().notRequired();
+export const numberNotRequired = (
+  field: messageTypeResponse
+): NumberSchema<Maybe<number | undefined>> =>
+  yup
+    .number()
+    .typeError(JSON.stringify(messages.yup.numberSchema(field)))
+    .notRequired();
 
 export const dateRequired = (field: messageTypeResponse): DateSchema =>
   yup
@@ -115,9 +133,10 @@ export const arrayRequired = (data: AnySchema, field: messageTypeResponse): AnyS
   yup
     .array()
     .of(data)
+    .min(1)
     .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
-export const arrayNotRequired = (data: AnySchema): AnySchema => yup.array().of(data);
+export const arrayNotRequired = (data: AnySchema): AnySchema => yup.array().of(data).notRequired();
 
 export const enumTypeRequired = <Enum extends object>(
   field: messageTypeResponse & { data: Enum }
@@ -135,4 +154,14 @@ export const enumTypeRequired = <Enum extends object>(
 
 export const enumTypeNotRequired = <Enum extends object>(
   field: messageTypeResponse & { data: Enum }
-): AnySchema => yup.mixed<Enum>().oneOf(Object.values(field.data));
+): AnySchema =>
+  yup
+    .mixed<Enum>()
+    .oneOf(
+      Object.values(field.data),
+      JSON.stringify({
+        english: 'inform an valid option',
+        portuguese: 'informe uma opção válida'
+      })
+    )
+    .notRequired();
