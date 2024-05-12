@@ -1,5 +1,5 @@
 import { DataSource } from '@infra/database';
-import { errorLogger, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
+import { errorLogger, messageErrorResponse, notFound, ok } from '@main/utils';
 import { propertyFindParams } from '@data/search';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
@@ -27,7 +27,7 @@ export const findOnePropertyController: Controller =
     try {
       const payload = await DataSource.property.findUnique({
         select: propertyFindParams,
-        where: whereById(request.params.id)
+        where: { id: Number(request.params.id) }
       });
 
       if (payload === null)

@@ -41,6 +41,7 @@ import type { propertyQueryFields } from '@data/validation';
  * @param {string} endDate.query (Ex: 2024-01-01).
  * @param {string} orderBy.query - enum:name,totalArea,userId,createdAt,updatedAt
  * @param {string} sort.query - enum:asc,desc
+ * @param {boolean} history.query
  * @return {FindPropertyResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

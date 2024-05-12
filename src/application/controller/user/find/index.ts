@@ -40,6 +40,7 @@ import type { userQueryFields } from '@data/validation';
  * @param {string} endDate.query (Ex: 2024-01-01).
  * @param {string} orderBy.query - enum:name,phone,email,createdAt,updatedAt
  * @param {string} sort.query - enum:asc,desc
+ * @param {boolean} history.query
  * @return {FindUserResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

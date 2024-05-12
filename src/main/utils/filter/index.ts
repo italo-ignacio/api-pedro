@@ -7,6 +7,7 @@ interface GetPageAndLimitInput<QueryType extends string> {
     sort?: 'asc' | 'desc';
     startDate?: string;
     endDate?: string;
+    history?: string;
   };
   list: QueryType[];
 }
@@ -43,11 +44,12 @@ export const getGenericFilter = <QueryType extends string>({
   list
 }: GetPageAndLimitInput<QueryType>): GetPageAndLimitOutput => {
   const orderBy = {};
-  const where: object[] = [
-    {
+  const where: object[] = [];
+
+  if (String(query.history) !== 'true')
+    where.push({
       finishedAt: null
-    }
-  ];
+    });
 
   if (typeof query.startDate === 'string') {
     const startDate = getDate(query.startDate);

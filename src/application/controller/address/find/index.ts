@@ -28,7 +28,7 @@ import type { addressQueryFields } from '@data/validation';
 
 /**
  * GET /address
- * @summary Find Address (Only Admin)
+ * @summary Find Address
  * @tags Address
  * @security BearerAuth
  * @param {string} city.query
@@ -43,6 +43,7 @@ import type { addressQueryFields } from '@data/validation';
  * @param {string} endDate.query (Ex: 2024-01-01).
  * @param {string} orderBy.query - enum:city,municipality,number,state,street,zipCode,createdAt,updatedAt
  * @param {string} sort.query - enum:asc,desc
+ * @param {boolean} history.query
  * @return {FindAddressResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

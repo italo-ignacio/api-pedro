@@ -124,3 +124,23 @@ enum Breed {
   medium
   large
 }
+
+model Test {
+  id       Int   @id @default(autoincrement())
+  test01   Test2 @relation(fields: [test01Id], references: [id], name: "test01")
+  test01Id Int
+
+  test02   Test2 @relation(fields: [test02Id], references: [id], name: "test02")
+  test02Id Int
+
+  @@map("test")
+}
+
+model Test2 {
+  id Int @id @default(autoincrement())
+
+  test01 Test[] @relation(name: "test01")
+  test02 Test[] @relation(name: "test02")
+
+  @@map("test2")
+}

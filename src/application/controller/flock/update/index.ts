@@ -67,12 +67,7 @@ export const updateFlockController: Controller =
           totalOthers: true,
           userId: true
         },
-        where: {
-          AND: {
-            finishedAt: null,
-            id: Number(request.params.id)
-          }
-        }
+        where: whereById(request.params.id)
       });
 
       if (flock === null)
@@ -90,10 +85,7 @@ export const updateFlockController: Controller =
       const project = await DataSource.project.findFirst({
         select: { id: true },
         where: {
-          AND: {
-            finishedAt: null,
-            flockId: flock.id
-          }
+          flockId: flock.id
         }
       });
 
@@ -104,7 +96,7 @@ export const updateFlockController: Controller =
         await DataSource.flock.update({
           data: { finishedAt: new Date() },
           select: { id: true },
-          where: whereById(request.params.id)
+          where: { id: Number(request.params.id) }
         });
 
         const payload = await DataSource.flock.create({

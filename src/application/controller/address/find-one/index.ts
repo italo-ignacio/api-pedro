@@ -1,6 +1,6 @@
 import { DataSource } from '@infra/database';
 import { addressFindParams } from '@data/search';
-import { errorLogger, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
+import { errorLogger, messageErrorResponse, notFound, ok } from '@main/utils';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
@@ -13,7 +13,7 @@ import type { Request, Response } from 'express';
 
 /**
  * GET /address/{id}
- * @summary Find one Address (Only Admin)
+ * @summary Find one Address
  * @tags Address
  * @security BearerAuth
  * @param {number} id.path.required
@@ -27,7 +27,7 @@ export const findOneAddressController: Controller =
     try {
       const payload = await DataSource.address.findUnique({
         select: addressFindParams,
-        where: whereById(request.params.id)
+        where: { id: Number(request.params.id) }
       });
 
       if (payload === null)
