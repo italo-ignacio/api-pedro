@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { propertyFindParams } from '../property';
 import type { Prisma } from '@prisma/client';
 

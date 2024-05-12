@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { addressFindParams } from '../address';
 import { userFindParams } from '../user';
 import type { Prisma } from '@prisma/client';

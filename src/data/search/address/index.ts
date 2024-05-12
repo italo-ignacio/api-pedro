@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import type { Prisma } from '@prisma/client';
 
 export const addressFindParams: Prisma.AddressSelect = {
