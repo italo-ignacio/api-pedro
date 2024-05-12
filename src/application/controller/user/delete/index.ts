@@ -1,6 +1,5 @@
 import { DataSource } from '@infra/database';
-import { badRequest, errorLogger, forbidden, notFound, ok, whereById } from '@main/utils';
-import { messages } from '@domain/helpers';
+import { errorLogger, forbidden, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
 import { userFindParams } from '@data/search';
 import { userIsOwner } from '@application/helper';
 import type { Controller } from '@application/protocols';
@@ -79,6 +78,7 @@ export const deleteUserController: Controller =
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
-      return badRequest({ message: messages.auth.notFound, response });
+
+      return messageErrorResponse({ error, response });
     }
   };

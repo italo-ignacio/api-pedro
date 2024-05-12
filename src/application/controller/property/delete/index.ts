@@ -1,6 +1,5 @@
 import { DataSource } from '@infra/database';
-import { badRequest, errorLogger, forbidden, notFound, ok, whereById } from '@main/utils';
-import { messages } from '@domain/helpers';
+import { errorLogger, forbidden, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
 import { propertyFindParams } from '@data/search';
 import { userIsOwnerOfProperty } from '@application/helper';
 import type { Controller } from '@application/protocols';
@@ -70,6 +69,7 @@ export const deletePropertyController: Controller =
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
-      return badRequest({ message: messages.auth.notFound, response });
+
+      return messageErrorResponse({ error, response });
     }
   };
