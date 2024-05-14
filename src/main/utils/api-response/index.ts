@@ -130,13 +130,25 @@ export const timeout = ({
 
 export const messageErrorResponse = ({
   error,
-  response
+  response,
+  entity
 }: {
   error: unknown;
+  entity?: messageTypeResponse;
   response: Response;
 }): Response => {
-  const newError = error as { message?: string };
+  const newError = error as { message?: string; meta?: { cause: string; modelName: string } };
   let message: messageTypeResponse | undefined;
+
+  if (newError?.meta?.cause === 'Record to update not found.')
+    return notFound({
+      entity: entity ?? {
+        english: newError?.meta?.modelName,
+        portuguese: newError?.meta?.modelName
+      },
+      message,
+      response
+    });
 
   if (error instanceof Error)
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions

@@ -8,7 +8,7 @@ import {
 } from '@main/utils';
 import { flockFindParams } from '@data/search';
 import { flockListQueryFields } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 import type { flockQueryFields } from '@data/validation';
 

@@ -12,7 +12,7 @@ import {
   whereById
 } from '@main/utils';
 import { updateAddressSchema } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Optional } from '@prisma/client/runtime/library';
 import type { Request, Response } from 'express';
 
@@ -48,7 +48,7 @@ export interface InsertAddressBody {
  * @tags Address
  * @security BearerAuth
  * @param {UpdateAddressBody} request.body
- * @param {string} id.path.required
+ * @param {number} id.path.required
  * @return {UpdateAddressResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

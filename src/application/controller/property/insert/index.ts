@@ -13,7 +13,7 @@ import {
 } from '@main/utils';
 import { hasUserById } from '@application/helper';
 import { insertPropertySchema } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { InsertAddressBody } from '@application/controller/address';
 import type { Request, Response } from 'express';
 

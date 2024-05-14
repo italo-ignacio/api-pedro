@@ -4,7 +4,6 @@ import {
   errorLogger,
   forbidden,
   messageErrorResponse,
-  notFound,
   ok,
   validationErrorResponse,
   whereById
@@ -12,7 +11,7 @@ import {
 import { propertyFindParams } from '@data/search';
 import { updatePropertySchema } from '@data/validation';
 import { userIsOwnerOfProperty } from '@application/helper';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
@@ -39,7 +38,7 @@ interface Body {
  * @tags Property
  * @security BearerAuth
  * @param {UpdatePropertyBody} request.body
- * @param {string} id.path.required
+ * @param {number} id.path.required
  * @return {UpdatePropertyResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json
@@ -48,13 +47,13 @@ interface Body {
 export const updatePropertyController: Controller =
   () => async (request: Request, response: Response) => {
     try {
+      await updatePropertySchema.validate(request, { abortEarly: false });
+
       if (!(await userIsOwnerOfProperty(request)))
         return forbidden({
           message: { english: 'update this property', portuguese: 'atualizar esta propriedade' },
           response
         });
-
-      await updatePropertySchema.validate(request, { abortEarly: false });
 
       const { name, totalArea } = request.body as Body;
 
@@ -64,18 +63,16 @@ export const updatePropertyController: Controller =
         where: whereById(request.params.id)
       });
 
-      if (payload === null)
-        return notFound({
-          entity: { english: 'Property', portuguese: 'Propriedade' },
-          response
-        });
-
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
 
       if (error instanceof ValidationError) return validationErrorResponse({ error, response });
 
-      return messageErrorResponse({ error, response });
+      return messageErrorResponse({
+        entity: { english: 'Property', portuguese: 'Propriedade' },
+        error,
+        response
+      });
     }
   };

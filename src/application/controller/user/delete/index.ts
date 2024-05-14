@@ -1,8 +1,8 @@
 import { DataSource } from '@infra/database';
-import { errorLogger, forbidden, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
+import { errorLogger, forbidden, messageErrorResponse, ok, whereById } from '@main/utils';
 import { userFindParams } from '@data/search';
 import { userIsOwner } from '@application/helper';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 /**
@@ -69,16 +69,14 @@ export const deleteUserController: Controller =
         where: whereById(request.params.id)
       });
 
-      if (payload === null)
-        return notFound({
-          entity: { english: 'User', portuguese: 'Usuário' },
-          response
-        });
-
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
 
-      return messageErrorResponse({ error, response });
+      return messageErrorResponse({
+        entity: { english: 'User', portuguese: 'Usuário' },
+        error,
+        response
+      });
     }
   };

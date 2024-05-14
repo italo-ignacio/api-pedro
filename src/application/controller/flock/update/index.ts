@@ -12,7 +12,7 @@ import {
 } from '@main/utils';
 import { flockFindParams } from '@data/search';
 import { updateFlockSchema } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
@@ -45,7 +45,7 @@ interface Body {
  * @tags Flock
  * @security BearerAuth
  * @param {UpdateFlockBody} request.body
- * @param {string} id.path.required
+ * @param {number} id.path.required
  * @return {UpdateFlockResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

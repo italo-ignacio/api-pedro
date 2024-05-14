@@ -1,8 +1,8 @@
 import { DataSource } from '@infra/database';
-import { errorLogger, forbidden, messageErrorResponse, notFound, ok, whereById } from '@main/utils';
+import { errorLogger, forbidden, messageErrorResponse, ok } from '@main/utils';
 import { propertyFindParams } from '@data/search';
 import { userIsOwnerOfProperty } from '@application/helper';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 /**
@@ -57,19 +57,17 @@ export const deletePropertyController: Controller =
           }
         },
         select: propertyFindParams,
-        where: whereById(request.params.id)
+        where: { id: Number(request.params.id) }
       });
-
-      if (payload === null)
-        return notFound({
-          entity: { english: 'Property', portuguese: 'Propriedade' },
-          response
-        });
 
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
 
-      return messageErrorResponse({ error, response });
+      return messageErrorResponse({
+        entity: { english: 'Property', portuguese: 'Propriedade' },
+        error,
+        response
+      });
     }
   };

@@ -8,7 +8,7 @@ import {
   messageErrorResponse,
   ok
 } from '@main/utils';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 import type { addressQueryFields } from '@data/validation';
 

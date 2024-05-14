@@ -8,7 +8,7 @@ import {
 } from '@main/utils';
 import { propertyFindParams } from '@data/search';
 import { propertyListQueryFields } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 import type { propertyQueryFields } from '@data/validation';
 

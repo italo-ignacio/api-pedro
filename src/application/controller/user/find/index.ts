@@ -8,7 +8,7 @@ import {
 } from '@main/utils';
 import { userFindParams } from '@data/search';
 import { userListQueryFields } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 import type { userQueryFields } from '@data/validation';
 
@@ -34,11 +34,12 @@ import type { userQueryFields } from '@data/validation';
  * @param {string} name.query
  * @param {string} email.query
  * @param {string} phone.query
+ * @param {string} roleEnum.query - enum:admin,common
  * @param {integer} page.query
  * @param {integer} limit.query
  * @param {string} startDate.query (Ex: 2024-01-01).
  * @param {string} endDate.query (Ex: 2024-01-01).
- * @param {string} orderBy.query - enum:name,phone,email,createdAt,updatedAt
+ * @param {string} orderBy.query - enum:name,phone,email,role,createdAt,updatedAt
  * @param {string} sort.query - enum:asc,desc
  * @param {boolean} history.query
  * @return {FindUserResponse} 200 - Successful response - application/json

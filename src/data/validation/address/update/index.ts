@@ -1,4 +1,4 @@
-import { stringNotRequired, zipCodeNotRequired } from '@main/utils';
+import { numberNotRequired, stringNotRequired, zipCodeNotRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const updateAddressSchema = yup.object().shape({
@@ -13,9 +13,8 @@ export const updateAddressSchema = yup.object().shape({
       length: 50,
       portuguese: 'município'
     }),
-    number: stringNotRequired({
+    number: numberNotRequired({
       english: 'number',
-      length: 50,
       portuguese: 'número'
     }),
     state: stringNotRequired({

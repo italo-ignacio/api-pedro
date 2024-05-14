@@ -13,7 +13,7 @@ import {
 import { flockFindParams } from '@data/search';
 import { hasUserById, userIsOwnerOfProperty } from '@application/helper';
 import { insertFlockSchema } from '@data/validation';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {

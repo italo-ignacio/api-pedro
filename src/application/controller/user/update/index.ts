@@ -5,7 +5,6 @@ import {
   errorLogger,
   forbidden,
   messageErrorResponse,
-  notFound,
   ok,
   validationErrorResponse,
   whereById
@@ -16,7 +15,7 @@ import { hash } from 'bcrypt';
 import { messages } from '@domain/helpers';
 import { updateUserSchema } from '@data/validation';
 import { userFindParams } from '@data/search';
-import type { Controller } from '@application/protocols';
+import type { Controller } from '@domain/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
@@ -47,7 +46,7 @@ interface Body {
  * @tags User
  * @security BearerAuth
  * @param {UpdateUserBody} request.body
- * @param {string} id.path.required
+ * @param {number} id.path.required
  * @return {UpdateUserResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json
@@ -56,13 +55,13 @@ interface Body {
 export const updateUserController: Controller =
   () => async (request: Request, response: Response) => {
     try {
+      await updateUserSchema.validate(request, { abortEarly: false });
+
       if (!userIsOwner(request))
         return forbidden({
           message: { english: 'update this user', portuguese: 'atualizar este usuário' },
           response
         });
-
-      await updateUserSchema.validate(request, { abortEarly: false });
 
       const { email, name, password, phone } = request.body as Body;
 
@@ -89,18 +88,16 @@ export const updateUserController: Controller =
         where: whereById(request.params.id)
       });
 
-      if (payload === null)
-        return notFound({
-          entity: { english: 'User', portuguese: 'Usuário' },
-          response
-        });
-
       return ok({ payload, response });
     } catch (error) {
       errorLogger(error);
 
       if (error instanceof ValidationError) return validationErrorResponse({ error, response });
 
-      return messageErrorResponse({ error, response });
+      return messageErrorResponse({
+        entity: { english: 'User', portuguese: 'Usuário' },
+        error,
+        response
+      });
     }
   };
