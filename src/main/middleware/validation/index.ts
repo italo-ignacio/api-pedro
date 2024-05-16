@@ -1,6 +1,7 @@
 import { DataSource } from '@infra/database';
 import { env } from '@main/config/env';
 import { errorLogger, removeBearer, unauthorized } from '@main/utils';
+import { userFindParams } from '@data/search';
 import { verify } from 'jsonwebtoken';
 import type { Controller } from '@domain/protocols';
 import type { NextFunction, Request, Response } from 'express';
@@ -30,6 +31,7 @@ export const validateTokenMiddleware: Controller =
         return unauthorized({ response });
 
       const account = await DataSource.user.findFirst({
+        select: userFindParams,
         where: {
           AND: {
             ...user,
@@ -40,7 +42,7 @@ export const validateTokenMiddleware: Controller =
 
       if (account === null) return unauthorized({ response });
 
-      Object.assign(request, { user });
+      Object.assign(request, { user: account });
       next();
     } catch (error) {
       errorLogger(error);

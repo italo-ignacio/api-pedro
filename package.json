@@ -7,7 +7,7 @@
     "build": "tsc",
     "seed": "npx prisma db seed",
     "reset": "npx prisma migrate reset",
-    "dev": "env-cmd -f ./.env.local ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main/server.ts --host",
+    "dev": "env-cmd -f ./.env ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main/server.ts --host",
     "start": "node build/main/server.js"
   },
   "prisma": {
