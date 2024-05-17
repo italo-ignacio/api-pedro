@@ -11,6 +11,7 @@ let CreatePropertyTrend = new Trend('Create_Property');
 let GetPropertyTrend = new Trend('Get_Property');
 let GetOnePropertyTrend = new Trend('Get_One_Property');
 let UpdatePropertyTrend = new Trend('Update_Property');
+let UpdateAddressTrend = new Trend('Update_Property');
 
 let CreateFlockTrend = new Trend('Create_Flock');
 let GetFlockTrend = new Trend('Get_Flock');
@@ -20,8 +21,7 @@ let UpdateFlockTrend = new Trend('Update_Flock');
 export let options = {
   stages: [
     { duration: '30s', target: 250 },
-    { duration: '30s', target: 500 },
-    { duration: '30s', target: 750 }
+    { duration: '30s', target: 500 }
   ]
 };
 
@@ -33,7 +33,8 @@ const endpoints = {
   status: `${baseUrl}/`,
   user: `${baseUrl}/user`,
   property: `${baseUrl}/property`,
-  flock: `${baseUrl}/flock`
+  flock: `${baseUrl}/flock`,
+  address: `${baseUrl}/address`
 };
 
 const params = {
@@ -54,6 +55,7 @@ export default function () {
   var userId;
   var propertyId;
   var flockId;
+  var addressId;
 
   group('user flow', function () {
     // Create user
@@ -123,6 +125,7 @@ export default function () {
       check(createPropertyRes, {
         'status was 200 (add property)': (r) => {
           propertyId = r.json().payload.id;
+          addressId = r.json().payload.address.id;
           return r.status == 200;
         }
       });
@@ -158,6 +161,26 @@ export default function () {
         'status was 200 (update property)': (r) => r.status == 200
       });
       UpdatePropertyTrend.add(updatePropertyRes.timings.duration);
+
+      sleep(SLEEP_DURATION);
+
+      // Update Address
+      const updateAddressData = JSON.stringify({
+        city: `Cidade Atualizada - ${Date.now()}`,
+        municipality: `Municipio Atualizado - ${Date.now()}`,
+        state: `Estado Atualizado - ${Date.now()}`,
+        street: `Rua Atualizada - ${Date.now()}`
+      });
+
+      let updateAddressRes = http.put(
+        `${endpoints.address}/${addressId}`,
+        updateAddressData,
+        tokenParams
+      );
+      check(updateAddressRes, {
+        'status was 200 (update address)': (r) => r.status == 200
+      });
+      UpdateAddressTrend.add(updateAddressRes.timings.duration);
 
       sleep(SLEEP_DURATION);
 
