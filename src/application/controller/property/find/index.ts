@@ -15,8 +15,8 @@ import type { propertyQueryFields } from '@data/validation';
 /**
  * @typedef {object} FindPropertyPayload
  * @property {array<Property>} content
- * @property {number} totalElements
- * @property {number} totalPages
+ * @property {integer} totalElements
+ * @property {integer} totalPages
  */
 
 /**
@@ -34,12 +34,12 @@ import type { propertyQueryFields } from '@data/validation';
  * @param {string} name.query
  * @param {number} totalAreaGreaterThan.query
  * @param {number} totalAreaLessThan.query
- * @param {number} userId.query
+ * @param {integer} userId.query
  * @param {integer} page.query
  * @param {integer} limit.query
  * @param {string} startDate.query (Ex: 2024-01-01).
  * @param {string} endDate.query (Ex: 2024-01-01).
- * @param {string} orderBy.query - enum:name,totalArea,userId,createdAt,updatedAt
+ * @param {string} orderBy.query - enum:name,totalArea,createdAt,updatedAt
  * @param {string} sort.query - enum:asc,desc
  * @param {boolean} history.query
  * @return {FindPropertyResponse} 200 - Successful response - application/json

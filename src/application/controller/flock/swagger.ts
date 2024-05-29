@@ -7,9 +7,7 @@
  * @property {number} totalCalves
  * @property {number} totalOthers
  * @property {User} user
- * @property {number} userId
- * @property {number} propertyId
- * @property {Property} property
+ * @property {Property|null} property
  * @property {string} finishedAt
  * @property {string} createdAt
  * @property {string} updatedAt

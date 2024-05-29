@@ -5,8 +5,7 @@ import {
   forbidden,
   messageErrorResponse,
   ok,
-  validationErrorResponse,
-  whereById
+  validationErrorResponse
 } from '@main/utils';
 import { propertyFindParams } from '@data/search';
 import { updatePropertySchema } from '@data/validation';
@@ -38,7 +37,7 @@ interface Body {
  * @tags Property
  * @security BearerAuth
  * @param {UpdatePropertyBody} request.body
- * @param {number} id.path.required
+ * @param {integer} id.path.required
  * @return {UpdatePropertyResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json
@@ -60,7 +59,7 @@ export const updatePropertyController: Controller =
       const payload = await DataSource.property.update({
         data: { name, totalArea },
         select: propertyFindParams,
-        where: whereById(request.params.id)
+        where: { id: Number(request.params.id) }
       });
 
       return ok({ payload, response });

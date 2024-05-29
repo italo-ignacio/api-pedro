@@ -6,14 +6,8 @@ export const propertyFindParams: Prisma.PropertySelect = {
   id: true,
   name: true,
   totalArea: true,
-  address: {
-    select: addressFindParams
-  },
-  addressId: true,
-  user: {
-    select: userFindParams
-  },
-  userId: true,
+  address: { select: addressFindParams },
+  user: { select: userFindParams },
   finishedAt: true,
   createdAt: true,
   updatedAt: true

@@ -13,14 +13,7 @@ export const flockFindParams = ({
   totalHeifers: true,
   totalOthers: true,
   user: true,
-  userId: true,
-  propertyId: true,
-  property:
-    findProperty ?? false
-      ? {
-          select: propertyFindParams
-        }
-      : false,
+  property: findProperty ?? false ? { select: propertyFindParams } : false,
   finishedAt: true,
   createdAt: true,
   updatedAt: true

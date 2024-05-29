@@ -15,8 +15,8 @@ import type { flockQueryFields } from '@data/validation';
 /**
  * @typedef {object} FindFlockPayload
  * @property {array<Flock>} content
- * @property {number} totalElements
- * @property {number} totalPages
+ * @property {integer} totalElements
+ * @property {integer} totalPages
  */
 
 /**

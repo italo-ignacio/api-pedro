@@ -45,7 +45,7 @@ interface Body {
  * @tags Flock
  * @security BearerAuth
  * @param {UpdateFlockBody} request.body
- * @param {number} id.path.required
+ * @param {integer} id.path.required
  * @return {UpdateFlockResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

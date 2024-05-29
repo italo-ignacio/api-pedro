@@ -52,7 +52,7 @@ interface Body {
  * @return {LoginResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  */
-export const authenticateUserController: Controller =
+export const authenticateController: Controller =
   () => async (request: Request, response: Response) => {
     try {
       await authenticateSchema.validate(request, { abortEarly: false });

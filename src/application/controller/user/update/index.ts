@@ -46,7 +46,7 @@ interface Body {
  * @tags User
  * @security BearerAuth
  * @param {UpdateUserBody} request.body
- * @param {number} id.path.required
+ * @param {integer} id.path.required
  * @return {UpdateUserResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json

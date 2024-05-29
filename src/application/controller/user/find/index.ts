@@ -15,8 +15,8 @@ import type { userQueryFields } from '@data/validation';
 /**
  * @typedef {object} FindUserPayload
  * @property {array<User>} content
- * @property {number} totalElements
- * @property {number} totalPages
+ * @property {integer} totalElements
+ * @property {integer} totalPages
  */
 
 /**

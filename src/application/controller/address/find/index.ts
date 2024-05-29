@@ -15,8 +15,8 @@ import type { addressQueryFields } from '@data/validation';
 /**
  * @typedef {object} FindAddressPayload
  * @property {array<Address>} content
- * @property {number} totalElements
- * @property {number} totalPages
+ * @property {integer} totalElements
+ * @property {integer} totalPages
  */
 
 /**

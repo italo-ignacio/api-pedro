@@ -16,7 +16,7 @@ import type { Request, Response } from 'express';
  * @summary Delete Property
  * @tags Property
  * @security BearerAuth
- * @param {number} id.path.required
+ * @param {integer} id.path.required
  * @return {DeletePropertyResponse} 200 - Successful response - application/json
  * @return {BadRequest} 400 - Bad request response - application/json
  * @return {UnauthorizedRequest} 401 - Unauthorized response - application/json
@@ -37,22 +37,14 @@ export const deletePropertyController: Controller =
           finishedAt: new Date(),
           flocks: {
             updateMany: {
-              data: {
-                finishedAt: new Date()
-              },
-              where: {
-                propertyId: Number(request.params.id)
-              }
+              data: { finishedAt: new Date() },
+              where: { propertyId: Number(request.params.id) }
             }
           },
           projects: {
             updateMany: {
-              data: {
-                finishedAt: new Date()
-              },
-              where: {
-                propertyId: Number(request.params.id)
-              }
+              data: { finishedAt: new Date() },
+              where: { propertyId: Number(request.params.id) }
             }
           }
         },
