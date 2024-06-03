@@ -5,7 +5,7 @@ export default (inputRouter: Router): void => {
 
   router.get('/', (req, res) => {
     res.json({
-      message: 'Api running successfully (◡‿◡)'
+      message: 'Api running successfully (◡‿◡) !'
     });
   });
 
